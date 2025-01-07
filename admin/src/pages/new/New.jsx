@@ -91,4 +91,8 @@ const New = ({ inputs, title }) => {
   );
 };
 
+<<<<<<< HEAD
 export default New;
+=======
+export default New;
+>>>>>>> e0b9deaf1f86d0fa79c4cf360b9ec2387c33ef63

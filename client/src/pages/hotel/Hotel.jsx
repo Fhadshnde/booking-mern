@@ -37,11 +37,15 @@ const Hotel = () => {
     return diffDays;
   }
 
+<<<<<<< HEAD
   // تأكد من أن dates موجودة وتحتوي على startDate و endDate
   const days =
     dates && dates[0] && dates[0].endDate && dates[0].startDate
       ? dayDifference(new Date(dates[0].endDate), new Date(dates[0].startDate))
       : 0;
+=======
+  const days = dayDifference(dates[0].endDate, dates[0].startDate);
+>>>>>>> e0b9deaf1f86d0fa79c4cf360b9ec2387c33ef63
 
   const handleOpen = (i) => {
     setSlideNumber(i);
@@ -67,7 +71,10 @@ const Hotel = () => {
       navigate("/login");
     }
   };
+<<<<<<< HEAD
 
+=======
+>>>>>>> e0b9deaf1f86d0fa79c4cf360b9ec2387c33ef63
   return (
     <div>
       <Navbar />
@@ -90,7 +97,11 @@ const Hotel = () => {
               />
               <div className="sliderWrapper">
                 <img
+<<<<<<< HEAD
                   src={`http://localhost:8800/api/uploads/${data.photos[slideNumber].split('/').pop()}`}
+=======
+                  src={data.photos[slideNumber]}
+>>>>>>> e0b9deaf1f86d0fa79c4cf360b9ec2387c33ef63
                   alt=""
                   className="sliderImg"
                 />
@@ -121,7 +132,11 @@ const Hotel = () => {
                 <div className="hotelImgWrapper" key={i}>
                   <img
                     onClick={() => handleOpen(i)}
+<<<<<<< HEAD
                     src={`http://localhost:8800/api/uploads/${photo.split('/').pop()}`}
+=======
+                    src={photo}
+>>>>>>> e0b9deaf1f86d0fa79c4cf360b9ec2387c33ef63
                     alt=""
                     className="hotelImg"
                   />
@@ -151,7 +166,11 @@ const Hotel = () => {
           <Footer />
         </div>
       )}
+<<<<<<< HEAD
       {openModal && <Reserve setOpen={setOpenModal} hotelId={id} />}
+=======
+      {openModal && <Reserve setOpen={setOpenModal} hotelId={id}/>}
+>>>>>>> e0b9deaf1f86d0fa79c4cf360b9ec2387c33ef63
     </div>
   );
 };

@@ -1,5 +1,9 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
+<<<<<<< HEAD
+=======
+
+>>>>>>> e0b9deaf1f86d0fa79c4cf360b9ec2387c33ef63
 import "./reserve.css";
 import useFetch from "../../hooks/useFetch";
 import { useContext, useState } from "react";
@@ -28,11 +32,15 @@ const Reserve = ({ setOpen, hotelId }) => {
     return dates;
   };
 
+<<<<<<< HEAD
   // تحقق من أن dates يحتوي على قيم startDate و endDate قبل استخدامها
   const alldates = 
     dates && dates[0] && dates[0].startDate && dates[0].endDate 
     ? getDatesInRange(dates[0].startDate, dates[0].endDate) 
     : [];
+=======
+  const alldates = getDatesInRange(dates[0].startDate, dates[0].endDate);
+>>>>>>> e0b9deaf1f86d0fa79c4cf360b9ec2387c33ef63
 
   const isAvailable = (roomNumber) => {
     const isFound = roomNumber.unavailableDates.some((date) =>
@@ -68,7 +76,10 @@ const Reserve = ({ setOpen, hotelId }) => {
       navigate("/");
     } catch (err) {}
   };
+<<<<<<< HEAD
 
+=======
+>>>>>>> e0b9deaf1f86d0fa79c4cf360b9ec2387c33ef63
   return (
     <div className="reserve">
       <div className="rContainer">
@@ -90,7 +101,11 @@ const Reserve = ({ setOpen, hotelId }) => {
             </div>
             <div className="rSelectRooms">
               {item.roomNumbers.map((roomNumber) => (
+<<<<<<< HEAD
                 <div className="room" key={roomNumber._id}>
+=======
+                <div className="room">
+>>>>>>> e0b9deaf1f86d0fa79c4cf360b9ec2387c33ef63
                   <label>{roomNumber.number}</label>
                   <input
                     type="checkbox"

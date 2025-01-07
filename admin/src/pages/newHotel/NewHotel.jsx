@@ -31,6 +31,7 @@ const NewHotel = () => {
   const handleClick = async (e) => {
     e.preventDefault();
     try {
+<<<<<<< HEAD
       const data = new FormData();
       Array.from(files).forEach(file => {
         data.append("files", file);
@@ -46,16 +47,42 @@ const NewHotel = () => {
 
       const newhotel = {
         ...formattedInfo,
+=======
+      const list = await Promise.all(
+        Object.values(files).map(async (file) => {
+          const data = new FormData();
+          data.append("file", file);
+          data.append("upload_preset", "upload");
+          const uploadRes = await axios.post(
+            "https://api.cloudinary.com/v1_1/lamadev/image/upload",
+            data
+          );
+
+          const { url } = uploadRes.data;
+          return url;
+        })
+      );
+
+      const newhotel = {
+        ...info,
+>>>>>>> e0b9deaf1f86d0fa79c4cf360b9ec2387c33ef63
         rooms,
         photos: list,
       };
 
+<<<<<<< HEAD
       await axios.post("http://localhost:8800/api/hotels", newhotel);
+=======
+      await axios.post("/hotels", newhotel);
+>>>>>>> e0b9deaf1f86d0fa79c4cf360b9ec2387c33ef63
     } catch (err) {
       console.log(err);
     }
   };
+<<<<<<< HEAD
 
+=======
+>>>>>>> e0b9deaf1f86d0fa79c4cf360b9ec2387c33ef63
   return (
     <div className="new">
       <Sidebar />
