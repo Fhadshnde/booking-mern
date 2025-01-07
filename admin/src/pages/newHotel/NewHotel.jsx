@@ -31,32 +31,31 @@ const NewHotel = () => {
   const handleClick = async (e) => {
     e.preventDefault();
     try {
-      const list = await Promise.all(
-        Object.values(files).map(async (file) => {
-          const data = new FormData();
-          data.append("file", file);
-          data.append("upload_preset", "upload");
-          const uploadRes = await axios.post(
-            "https://api.cloudinary.com/v1_1/lamadev/image/upload",
-            data
-          );
+      const data = new FormData();
+      Array.from(files).forEach(file => {
+        data.append("files", file);
+      });
 
-          const { url } = uploadRes.data;
-          return url;
-        })
-      );
+      const uploadRes = await axios.post("http://localhost:8800/upload", data);
+      const list = uploadRes.data.filePaths;
+
+      const formattedInfo = { 
+        ...info, 
+        cheapestPrice: parseFloat(info.cheapestPrice.replace(",", ".")) 
+      };
 
       const newhotel = {
-        ...info,
+        ...formattedInfo,
         rooms,
         photos: list,
       };
 
-      await axios.post("/hotels", newhotel);
+      await axios.post("http://localhost:8800/api/hotels", newhotel);
     } catch (err) {
       console.log(err);
     }
   };
+
   return (
     <div className="new">
       <Sidebar />

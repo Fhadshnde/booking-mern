@@ -37,7 +37,11 @@ const Hotel = () => {
     return diffDays;
   }
 
-  const days = dayDifference(dates[0].endDate, dates[0].startDate);
+  // تأكد من أن dates موجودة وتحتوي على startDate و endDate
+  const days =
+    dates && dates[0] && dates[0].endDate && dates[0].startDate
+      ? dayDifference(new Date(dates[0].endDate), new Date(dates[0].startDate))
+      : 0;
 
   const handleOpen = (i) => {
     setSlideNumber(i);
@@ -63,6 +67,7 @@ const Hotel = () => {
       navigate("/login");
     }
   };
+
   return (
     <div>
       <Navbar />
@@ -85,7 +90,7 @@ const Hotel = () => {
               />
               <div className="sliderWrapper">
                 <img
-                  src={data.photos[slideNumber]}
+                  src={`http://localhost:8800/api/uploads/${data.photos[slideNumber].split('/').pop()}`}
                   alt=""
                   className="sliderImg"
                 />
@@ -116,7 +121,7 @@ const Hotel = () => {
                 <div className="hotelImgWrapper" key={i}>
                   <img
                     onClick={() => handleOpen(i)}
-                    src={photo}
+                    src={`http://localhost:8800/api/uploads/${photo.split('/').pop()}`}
                     alt=""
                     className="hotelImg"
                   />
@@ -146,7 +151,7 @@ const Hotel = () => {
           <Footer />
         </div>
       )}
-      {openModal && <Reserve setOpen={setOpenModal} hotelId={id}/>}
+      {openModal && <Reserve setOpen={setOpenModal} hotelId={id} />}
     </div>
   );
 };
