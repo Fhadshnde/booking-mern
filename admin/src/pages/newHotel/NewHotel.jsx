@@ -8,10 +8,9 @@ import useFetch from "../../hooks/useFetch";
 import axios from "axios";
 
 const NewHotel = () => {
-  const [files, setFiles] = useState("");
+  const [files, setFiles] = useState(null);
   const [info, setInfo] = useState({});
   const [rooms, setRooms] = useState([]);
-
   const { data, loading, error } = useFetch("/rooms");
 
   const handleChange = (e) => {
@@ -19,87 +18,63 @@ const NewHotel = () => {
   };
 
   const handleSelect = (e) => {
-    const value = Array.from(
-      e.target.selectedOptions,
-      (option) => option.value
-    );
+    const value = Array.from(e.target.selectedOptions, (option) => option.value);
     setRooms(value);
   };
 
-  console.log(files);
+  const handleFileChange = (e) => {
+    setFiles(e.target.files);  // Store files from the input
+  };
 
   const handleClick = async (e) => {
     e.preventDefault();
+
     try {
-<<<<<<< HEAD
-      const data = new FormData();
-      Array.from(files).forEach(file => {
-        data.append("files", file);
-      });
-
-      const uploadRes = await axios.post("http://localhost:8800/upload", data);
-      const list = uploadRes.data.filePaths;
-
-      const formattedInfo = { 
-        ...info, 
-        cheapestPrice: parseFloat(info.cheapestPrice.replace(",", ".")) 
-      };
-
-      const newhotel = {
-        ...formattedInfo,
-=======
-      const list = await Promise.all(
+      // Upload the images to cloud storage (Cloudinary)
+      const fileUrls = await Promise.all(
         Object.values(files).map(async (file) => {
-          const data = new FormData();
-          data.append("file", file);
-          data.append("upload_preset", "upload");
-          const uploadRes = await axios.post(
-            "https://api.cloudinary.com/v1_1/lamadev/image/upload",
-            data
-          );
-
-          const { url } = uploadRes.data;
-          return url;
+          const formData = new FormData();
+          formData.append("file", file);
+          formData.append("upload_preset", "upload");  // Cloudinary preset
+          
+          const response = await axios.post("https://api.cloudinary.com/v1_1/lamadev/image/upload", formData);
+          return response.data.url;  // Return the image URL
         })
       );
 
-      const newhotel = {
+      // Prepare the new hotel data
+      const formattedInfo = {
         ...info,
->>>>>>> e0b9deaf1f86d0fa79c4cf360b9ec2387c33ef63
+        cheapestPrice: parseFloat(info.cheapestPrice.replace(",", ".")),  // Handle price formatting
         rooms,
-        photos: list,
+        photos: fileUrls,  // Attach uploaded images to hotel data
       };
 
-<<<<<<< HEAD
-      await axios.post("http://localhost:8800/api/hotels", newhotel);
-=======
-      await axios.post("/hotels", newhotel);
->>>>>>> e0b9deaf1f86d0fa79c4cf360b9ec2387c33ef63
+      // Send new hotel data to backend API
+      await axios.post("/api/hotels", formattedInfo);
+
     } catch (err) {
-      console.log(err);
+      console.error("Error uploading hotel data:", err);
     }
   };
-<<<<<<< HEAD
 
-=======
->>>>>>> e0b9deaf1f86d0fa79c4cf360b9ec2387c33ef63
   return (
     <div className="new">
       <Sidebar />
       <div className="newContainer">
         <Navbar />
         <div className="top">
-          <h1>Add New Product</h1>
+          <h1>Add New Hotel</h1>
         </div>
         <div className="bottom">
           <div className="left">
             <img
               src={
                 files
-                  ? URL.createObjectURL(files[0])
+                  ? URL.createObjectURL(files[0])  // Preview the first file selected
                   : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
               }
-              alt=""
+              alt="Hotel Preview"
             />
           </div>
           <div className="right">
@@ -112,7 +87,7 @@ const NewHotel = () => {
                   type="file"
                   id="file"
                   multiple
-                  onChange={(e) => setFiles(e.target.files)}
+                  onChange={handleFileChange}
                   style={{ display: "none" }}
                 />
               </div>
@@ -128,6 +103,7 @@ const NewHotel = () => {
                   />
                 </div>
               ))}
+
               <div className="formInput">
                 <label>Featured</label>
                 <select id="featured" onChange={handleChange}>
@@ -135,19 +111,20 @@ const NewHotel = () => {
                   <option value={true}>Yes</option>
                 </select>
               </div>
+
               <div className="selectRooms">
                 <label>Rooms</label>
                 <select id="rooms" multiple onChange={handleSelect}>
                   {loading
-                    ? "loading"
-                    : data &&
-                      data.map((room) => (
+                    ? "Loading..."
+                    : data?.map((room) => (
                         <option key={room._id} value={room._id}>
                           {room.title}
                         </option>
                       ))}
                 </select>
               </div>
+
               <button onClick={handleClick}>Send</button>
             </form>
           </div>

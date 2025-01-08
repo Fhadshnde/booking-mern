@@ -31,39 +31,36 @@ const Hotel = () => {
   const { dates, options } = useContext(SearchContext);
 
   const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
+
   function dayDifference(date1, date2) {
     const timeDiff = Math.abs(date2.getTime() - date1.getTime());
     const diffDays = Math.ceil(timeDiff / MILLISECONDS_PER_DAY);
     return diffDays;
   }
 
-<<<<<<< HEAD
-  // تأكد من أن dates موجودة وتحتوي على startDate و endDate
-  const days =
-    dates && dates[0] && dates[0].endDate && dates[0].startDate
-      ? dayDifference(new Date(dates[0].endDate), new Date(dates[0].startDate))
-      : 0;
-=======
-  const days = dayDifference(dates[0].endDate, dates[0].startDate);
->>>>>>> e0b9deaf1f86d0fa79c4cf360b9ec2387c33ef63
+  // Ensure the dates and start/endDate exist before using them
+  const days = dates && dates[0] && dates[0].endDate && dates[0].startDate
+    ? dayDifference(new Date(dates[0].endDate), new Date(dates[0].startDate))
+    : 0;
 
+  // Open the image slider at index `i`
   const handleOpen = (i) => {
     setSlideNumber(i);
     setOpen(true);
   };
 
+  // Move to the next/previous image
   const handleMove = (direction) => {
     let newSlideNumber;
-
     if (direction === "l") {
-      newSlideNumber = slideNumber === 0 ? 5 : slideNumber - 1;
+      newSlideNumber = slideNumber === 0 ? data.photos.length - 1 : slideNumber - 1;
     } else {
-      newSlideNumber = slideNumber === 5 ? 0 : slideNumber + 1;
+      newSlideNumber = slideNumber === data.photos.length - 1 ? 0 : slideNumber + 1;
     }
-
     setSlideNumber(newSlideNumber);
   };
 
+  // Handle booking (open modal or redirect to login)
   const handleClick = () => {
     if (user) {
       setOpenModal(true);
@@ -71,16 +68,13 @@ const Hotel = () => {
       navigate("/login");
     }
   };
-<<<<<<< HEAD
 
-=======
->>>>>>> e0b9deaf1f86d0fa79c4cf360b9ec2387c33ef63
   return (
     <div>
       <Navbar />
       <Header type="list" />
       {loading ? (
-        "loading"
+        "Loading..."
       ) : (
         <div className="hotelContainer">
           {open && (
@@ -97,12 +91,8 @@ const Hotel = () => {
               />
               <div className="sliderWrapper">
                 <img
-<<<<<<< HEAD
-                  src={`http://localhost:8800/api/uploads/${data.photos[slideNumber].split('/').pop()}`}
-=======
                   src={data.photos[slideNumber]}
->>>>>>> e0b9deaf1f86d0fa79c4cf360b9ec2387c33ef63
-                  alt=""
+                  alt="hotel"
                   className="sliderImg"
                 />
               </div>
@@ -114,7 +104,9 @@ const Hotel = () => {
             </div>
           )}
           <div className="hotelWrapper">
-            <button className="bookNow">Reserve or Book Now!</button>
+            <button className="bookNow" onClick={handleClick}>
+              Reserve or Book Now!
+            </button>
             <h1 className="hotelTitle">{data.name}</h1>
             <div className="hotelAddress">
               <FontAwesomeIcon icon={faLocationDot} />
@@ -132,12 +124,8 @@ const Hotel = () => {
                 <div className="hotelImgWrapper" key={i}>
                   <img
                     onClick={() => handleOpen(i)}
-<<<<<<< HEAD
-                    src={`http://localhost:8800/api/uploads/${photo.split('/').pop()}`}
-=======
                     src={photo}
->>>>>>> e0b9deaf1f86d0fa79c4cf360b9ec2387c33ef63
-                    alt=""
+                    alt="hotel"
                     className="hotelImg"
                   />
                 </div>
@@ -166,11 +154,7 @@ const Hotel = () => {
           <Footer />
         </div>
       )}
-<<<<<<< HEAD
       {openModal && <Reserve setOpen={setOpenModal} hotelId={id} />}
-=======
-      {openModal && <Reserve setOpen={setOpenModal} hotelId={id}/>}
->>>>>>> e0b9deaf1f86d0fa79c4cf360b9ec2387c33ef63
     </div>
   );
 };

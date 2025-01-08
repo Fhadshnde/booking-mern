@@ -1,10 +1,7 @@
 import Hotel from "../models/Hotel.js";
 import Room from "../models/Room.js";
 
-<<<<<<< HEAD
-// إنشاء فندق جديد
-=======
->>>>>>> e0b9deaf1f86d0fa79c4cf360b9ec2387c33ef63
+// Create a new hotel
 export const createHotel = async (req, res, next) => {
   const newHotel = new Hotel(req.body);
 
@@ -16,10 +13,7 @@ export const createHotel = async (req, res, next) => {
   }
 };
 
-<<<<<<< HEAD
-// تحديث بيانات فندق
-=======
->>>>>>> e0b9deaf1f86d0fa79c4cf360b9ec2387c33ef63
+// Update hotel details
 export const updateHotel = async (req, res, next) => {
   try {
     const updatedHotel = await Hotel.findByIdAndUpdate(
@@ -32,11 +26,8 @@ export const updateHotel = async (req, res, next) => {
     next(err);
   }
 };
-<<<<<<< HEAD
 
-// حذف فندق
-=======
->>>>>>> e0b9deaf1f86d0fa79c4cf360b9ec2387c33ef63
+// Delete a hotel
 export const deleteHotel = async (req, res, next) => {
   try {
     await Hotel.findByIdAndDelete(req.params.id);
@@ -45,11 +36,8 @@ export const deleteHotel = async (req, res, next) => {
     next(err);
   }
 };
-<<<<<<< HEAD
 
-// جلب بيانات فندق محدد
-=======
->>>>>>> e0b9deaf1f86d0fa79c4cf360b9ec2387c33ef63
+// Get data of a specific hotel
 export const getHotel = async (req, res, next) => {
   try {
     const hotel = await Hotel.findById(req.params.id);
@@ -58,57 +46,35 @@ export const getHotel = async (req, res, next) => {
     next(err);
   }
 };
-<<<<<<< HEAD
 
-// جلب قائمة بالفنادق مع الشروط المحددة
+// Get a list of hotels with specific filters
 export const getHotels = async (req, res, next) => {
   const { min = 1, max = 999, ...others } = req.query;
   try {
     const hotels = await Hotel.find({
       ...others,
       cheapestPrice: { $gt: min, $lt: max },
-    }).limit(Number(req.query.limit));
-=======
-export const getHotels = async (req, res, next) => {
-  const { min, max, ...others } = req.query;
-  try {
-    const hotels = await Hotel.find({
-      ...others,
-      cheapestPrice: { $gt: min | 1, $lt: max || 999 },
-    }).limit(req.query.limit);
->>>>>>> e0b9deaf1f86d0fa79c4cf360b9ec2387c33ef63
+    }).limit(Number(req.query.limit) || 10); // Default limit to 10 if not specified
     res.status(200).json(hotels);
   } catch (err) {
     next(err);
   }
 };
-<<<<<<< HEAD
 
-// حساب عدد الفنادق في كل مدينة
-=======
->>>>>>> e0b9deaf1f86d0fa79c4cf360b9ec2387c33ef63
+// Get the count of hotels by city
 export const countByCity = async (req, res, next) => {
   const cities = req.query.cities.split(",");
   try {
     const list = await Promise.all(
-<<<<<<< HEAD
       cities.map(city => Hotel.countDocuments({ city }))
-=======
-      cities.map((city) => {
-        return Hotel.countDocuments({ city: city });
-      })
->>>>>>> e0b9deaf1f86d0fa79c4cf360b9ec2387c33ef63
     );
     res.status(200).json(list);
   } catch (err) {
     next(err);
   }
 };
-<<<<<<< HEAD
 
-// حساب عدد الفنادق حسب النوع
-=======
->>>>>>> e0b9deaf1f86d0fa79c4cf360b9ec2387c33ef63
+// Get the count of hotels by type
 export const countByType = async (req, res, next) => {
   try {
     const hotelCount = await Hotel.countDocuments({ type: "hotel" });
@@ -129,25 +95,20 @@ export const countByType = async (req, res, next) => {
   }
 };
 
-<<<<<<< HEAD
-// جلب قائمة بالغرف لفندق معين
-=======
->>>>>>> e0b9deaf1f86d0fa79c4cf360b9ec2387c33ef63
+// Get the rooms of a specific hotel
 export const getHotelRooms = async (req, res, next) => {
   try {
     const hotel = await Hotel.findById(req.params.id);
-    const list = await Promise.all(
-<<<<<<< HEAD
-      hotel.rooms.map(room => Room.findById(room))
+    if (!hotel) {
+      return res.status(404).json("Hotel not found");
+    }
+
+    // Fetch rooms using the room IDs stored in the hotel document
+    const roomsList = await Promise.all(
+      hotel.rooms.map(roomId => Room.findById(roomId))
     );
-    res.status(200).json(list);
-=======
-      hotel.rooms.map((room) => {
-        return Room.findById(room);
-      })
-    );
-    res.status(200).json(list)
->>>>>>> e0b9deaf1f86d0fa79c4cf360b9ec2387c33ef63
+
+    res.status(200).json(roomsList);
   } catch (err) {
     next(err);
   }
